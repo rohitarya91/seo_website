@@ -2,12 +2,12 @@
 session_start();
 
 if (!isset($_SESSION['email'])) {
-  header("Location: login.php");
+  header("Location: ../auth/login.php");
   exit();
 }
 
 if ($_SESSION['email'] != "admin@gmail.com") {
-  header("Location: user_dashboard.php");
+  header("Location: user_dashbord.php");
   exit();
 }
 ?>
@@ -27,8 +27,8 @@ if ($_SESSION['email'] != "admin@gmail.com") {
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- <link rel="stylesheet" href="style.css" /> Login Styles -->
-  <link rel="stylesheet" href="dashboard.css" /> <!-- Dashboard Specific Styles -->
+  <!-- <link rel="stylesheet" href="../assets/css/style.css" /> Login Styles -->
+  <link rel="stylesheet" href="../assets/css/dashboard.css" /> <!-- Dashboard Specific Styles -->
 </head>
 
 <body>

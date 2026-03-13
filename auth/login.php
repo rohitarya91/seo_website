@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "db.php";
+include "../assets/db.php";
 $error[] = "";
 
 if (isset($_POST['login'])) {
@@ -17,9 +17,9 @@ if (isset($_POST['login'])) {
         $_SESSION['email'] = $user['email']; //store email in session 
         if($user['email'] == "admin@gmail.com"){
 
-            header("Location: dashboard.php");
+            header("Location: ../dashboard/dashboard.php");
         }else{
-            header("location: user_dashbord.php");
+            header("location: ../dashboard/user_dashbord.php");
         }
         exit();
     } else {
@@ -35,7 +35,7 @@ if (isset($_POST['login'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
@@ -111,7 +111,7 @@ if (isset($_POST['login'])) {
 
     </div>
 
-    <script src="js/auth.js"></script>
+    <script src="../assets/js/auth.js"></script>
 </body>
 
 </html>

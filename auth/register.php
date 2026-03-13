@@ -1,5 +1,5 @@
 <?php
-include "db.php";
+include "../assets/db.php";
 
 if (isset($_POST['register'])) {
     $name = $_POST['name'];
@@ -33,7 +33,7 @@ if (isset($_POST['register'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up page</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
@@ -111,7 +111,7 @@ if (isset($_POST['register'])) {
             <div class="shape shape-4"></div>
         </div>
     </div>
-    <script src="js/auth.js"></script>
+    <script src="../assets/js/auth.js"></script>
 </body>
 
 </html>

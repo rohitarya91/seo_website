@@ -39,8 +39,8 @@ $_SESSION['role'] = "User";
                 <div class="col-md-9"><?php echo $_SESSION['role']; ?></div>
             </div>
 
-            <a href="user_dashbord.php" class="btn btn-secondary">Back</a>
-            <a href="logout.php" class="btn btn-danger">Logout</a>
+            <a href="../dashboard/user_dashbord.php" class="btn btn-secondary">Back</a>
+            <a href="../auth/logout.php" class="btn btn-danger">Logout</a>
         </div>
     </div>
 

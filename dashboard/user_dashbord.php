@@ -82,9 +82,9 @@
             data-bs-toggle="dropdown" aria-expanded="false">R</h1>
     
            <ul class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item" href="account.php">View Account</a></li>
+          <li><a class="dropdown-item" href="../account/account.php">View Account</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item text-danger" href="logout.php">Logout</a></li>
+          <li><a class="dropdown-item text-danger" href="../auth/logout.php">Logout</a></li>
         </ul>
       </div>
     </div>

@@ -12,9 +12,9 @@
       content="organic produce, fresh vegetables, farm-to-table, local farming, healthy food delivery"
     />
     <title>🌿Harvest Fresh</title>
-    <link rel="stylesheet" href="./bootstrap.min.css" />
-    <!-- <link rel="stylesheet" href="./style.css"> -->
-    <!-- Removed empty link tag: <link rel="stylesheet" href="./"> -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <!-- Removed login CSS tag from here -->
+    <!-- Removed empty link tag: <link rel="stylesheet" href="./" -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -348,7 +348,7 @@
           Organic fruits, vegetables, and farm-fresh products delivered with
           care.
         </p>
-        <a href="./login.php" class="btn">Shop Fresh</a>
+        <a href="./auth/login.php" class="btn">Shop Fresh</a>
       </div>
     </section>
 
@@ -377,7 +377,7 @@
         <h2>What We Offer</h2>
 
         <div class="cards">
-          <a href="./login.php">
+          <a href="./auth/login.php">
             <div class="card">
               <img
                 src="https://imgs.search.brave.com/GVZKzl3BWeHTlYKbf4IjloTo0BSmQaLs-nP1y9xKl5A/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wNTUv/MDMwLzU0Ny9zbWFs/bC9hLWJhc2tldC1v/Zi12ZWdldGFibGVz/LXBuZy5wbmc"
@@ -391,7 +391,7 @@
             </div>
           </a>
 
-          <a href="./login.php">
+          <a href="./auth/login.php">
             <div class="card">
               <img
                 src="https://imgs.search.brave.com/FlxMF05-1rH248VBIZmwV82CcO95weY6cNshZrvQbeE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMjcv/NzkzLzY3My9zbWFs/bC9mcmVzaC1mcnVp/dHMtZmFsbGluZy1p/bi13YXRlci1zcGxh/c2gtYWktZ2VuZXJl/dGl2ZS1mcmVlLXBo/b3RvLmpwZw"
