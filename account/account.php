@@ -1,50 +1,64 @@
 <?php
-session_start();
+require_once __DIR__ . '/../config/store.php';
 
-/* Demo Data (baad me database se laa sakte ho) */
-$_SESSION['name'] = "Rahul";
-$_SESSION['email'] = "rahul@gmail.com";
-$_SESSION['role'] = "User";
+require_login();
+
+$name = current_user_name();
+$email = current_user_email();
+$role = is_admin() ? 'Admin' : 'User';
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>View Account</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/account.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-light">
 
-<div class="container mt-5">
-
-    <div class="card shadow">
-        <div class="card-header bg-success text-white">
-            <h4>My Account</h4>
-        </div>
-
-        <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-md-3 fw-bold">Name:</div>
-                <div class="col-md-9"><?php echo $_SESSION['name']; ?></div>
+<body class="page">
+    <div class="page-shell">
+        <aside class="glass-panel side-panel">
+            <div class="profile-card">
+                <div class="profile-avatar"><?php echo e(get_avatar_letter($name)); ?></div>
+                <h3><?php echo e($name); ?></h3>
+                <p class="muted"><?php echo e($role); ?></p>
             </div>
 
-            <div class="row mb-3">
-                <div class="col-md-3 fw-bold">Email:</div>
-                <div class="col-md-9"><?php echo $_SESSION['email']; ?></div>
+            <ul class="nav-list">
+                <li><a href="../dashboard/user_dashboard.php"><i class="fa-solid fa-house"></i> Back to Dashboard</a></li>
+                <li><a href="../auth/logout.php"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+            </ul>
+        </aside>
+
+        <main class="glass-panel main-panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <h1>My Account</h1>
+                    <p class="muted">Your profile details and account settings.</p>
+                </div>
             </div>
 
-            <div class="row mb-3">
-                <div class="col-md-3 fw-bold">Role:</div>
-                <div class="col-md-9"><?php echo $_SESSION['role']; ?></div>
+            <div class="content-card">
+                <div class="data-row">
+                    <span class="muted">Name</span>
+                    <strong><?php echo e($name); ?></strong>
+                </div>
+                <div class="data-row">
+                    <span class="muted">Email</span>
+                    <strong><?php echo e($email); ?></strong>
+                </div>
+                <div class="data-row">
+                    <span class="muted">Role</span>
+                    <strong><?php echo e($role); ?></strong>
+                </div>
             </div>
-
-            <a href="../dashboard/user_dashbord.php" class="btn btn-secondary">Back</a>
-            <a href="../auth/logout.php" class="btn btn-danger">Logout</a>
-        </div>
+        </main>
     </div>
-
-</div>
-
 </body>
+
 </html>

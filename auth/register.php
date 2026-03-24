@@ -1,29 +1,45 @@
 <?php
-include "../assets/db.php";
+require_once __DIR__ . '/../config/store.php';
+
+$errors = [];
 
 if (isset($_POST['register'])) {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $pass = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $name = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $password = trim($_POST['password'] ?? '');
 
-    mysqli_query(
-        $conn,
-        "INSERT INTO users(name,email,password)
-         VALUES('$name','$email','$pass')"
-    );
+    if ($name === '' || $email === '' || $password === '') {
+        $errors[] = 'Please fill all fields.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = 'Please enter a valid email address.';
+    } elseif (strlen($password) < 6) {
+        $errors[] = 'Password must be at least 6 characters.';
+    } else {
+        $checkStmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+        $checkStmt->bind_param('s', $email);
+        $checkStmt->execute();
+        $exists = $checkStmt->get_result()->num_rows > 0;
+        $checkStmt->close();
 
-    header("Location: login.php");
-    exit();
+        if ($exists) {
+            $errors[] = 'Email already registered.';
+        } else {
+            $pass = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $conn->prepare("INSERT INTO users(name,email,password) VALUES(?,?,?)");
+            $stmt->bind_param('sss', $name, $email, $pass);
+
+            if ($stmt->execute()) {
+                $stmt->close();
+                set_flash('success', 'Registration successful. Please login.');
+                redirect_to('login.php');
+            }
+
+            $stmt->close();
+            $errors[] = 'Unable to register right now.';
+        }
+    }
 }
-
 ?>
-
-<!-- <form method="post">
-    <input type="text" name="name" placeholder="Name" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <button name="register">Register</button>
-</form> -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +52,7 @@ if (isset($_POST['register'])) {
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
-<body>
+<body class="auth-page">
     <div class="login-container">
         <div class="login-glass">
             <div class="login-header">
@@ -48,23 +64,21 @@ if (isset($_POST['register'])) {
                 <p>Start your journey with us</p>
             </div>
 
-            <form class="login-form" id="signupForm" method="post" accept="">
+            <form class="login-form" id="signupForm" method="post">
                 <div class="input-group">
                     <label for="name">Name</label>
                     <div class="input-field">
                         <i class="fas fa-user"></i>
-                        <input type="text" id="name" name="name" placeholder="Enter your name" />
+                        <input type="text" id="name" name="name" placeholder="Enter your name" value="<?php echo e($_POST['name'] ?? ''); ?>" />
                     </div>
-                    <span class="error-msg" id="nameError"></span>
                 </div>
 
                 <div class="input-group">
                     <label for="email">Email</label>
                     <div class="input-field">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" id="email" name="email" placeholder="Enter your email" />
+                        <input type="email" id="email" name="email" placeholder="Enter your email" value="<?php echo e($_POST['email'] ?? ''); ?>" />
                     </div>
-                    <span class="error-msg" id="emailError"></span>
                 </div>
 
                 <div class="input-group">
@@ -76,8 +90,11 @@ if (isset($_POST['register'])) {
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
-                    <span class="error-msg" id="passwordError"></span>
                 </div>
+
+                <?php if (!empty($errors)): ?>
+                    <span class="error-msg"><?php echo e(implode(' ', $errors)); ?></span>
+                <?php endif; ?>
 
                 <button type="submit" name="register" class="login-btn">
                     <span>Register</span>
@@ -103,15 +120,7 @@ if (isset($_POST['register'])) {
                 <p class="signup-link">Already have an account? <a href="./login.php">Login</a></p>
             </form>
         </div>
-
-        <div class="floating-shapes">
-            <div class="shape shape-1"></div>
-            <div class="shape shape-2"></div>
-            <div class="shape shape-3"></div>
-            <div class="shape shape-4"></div>
-        </div>
     </div>
-    <script src="../assets/js/auth.js"></script>
 </body>
 
 </html>

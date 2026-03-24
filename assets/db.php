@@ -1,7 +1,9 @@
 <?php
-$conn = mysqli_connect("localhost","root","","shopdb");
+$conn = mysqli_connect("localhost", "root", "", "shopdb");
 
-if(!$conn){
-    die("Database connection failed");
+if (!$conn) {
+    die("Database connection failed: " . mysqli_connect_error());
 }
+
+mysqli_set_charset($conn, "utf8mb4");
 ?>

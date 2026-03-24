@@ -1,29 +1,46 @@
 <?php
-session_start();
-include "../assets/db.php";
-$error[] = "";
+require_once __DIR__ . '/../config/store.php';
+
+$error = [];
+$flash = get_flash();
 
 if (isset($_POST['login'])) {
-    $email = $_POST['email'];
-    $pass = $_POST['password'];
+    $email = trim($_POST['email'] ?? '');
+    $password = trim($_POST['password'] ?? '');
 
-    $q = mysqli_query($conn, "SELECT * FROM users WHERE email='$email'");
-    $user = mysqli_fetch_assoc($q);
-
-    if ($user && password_verify($pass, $user['password'])) {
-
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['user_name'] = $user['name'];
-        $_SESSION['email'] = $user['email']; //store email in session 
-        if($user['email'] == "admin@gmail.com"){
-
-            header("Location: ../dashboard/dashboard.php");
-        }else{
-            header("location: ../dashboard/user_dashbord.php");
-        }
-        exit();
+    if ($email === '' || $password === '') {
+        $error[] = "Please fill all fields.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error[] = "Enter a valid email.";
     } else {
-        $error[] = "Invalid_Login";
+        $stmt = $conn->prepare("SELECT id, name, email, password FROM users WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows === 1) {
+            $user = $result->fetch_assoc();
+
+            if (password_verify($password, $user['password'])) {
+                session_regenerate_id(true);
+
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_name'] = $user['name'];
+                $_SESSION['email'] = $user['email'];
+
+                if ($user['email'] === "admin@gmail.com") {
+                    redirect_to("../dashboard/dashboard.php");
+                }
+
+                redirect_to("../dashboard/user_dashboard.php");
+            } else {
+                $error[] = "Invalid email or password.";
+            }
+        } else {
+            $error[] = "Invalid email or password.";
+        }
+
+        $stmt->close();
     }
 }
 ?>
@@ -38,7 +55,7 @@ if (isset($_POST['login'])) {
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
-<body>
+<body class="auth-page">
     <div class="login-container">
         <div class="login-glass">
             <div class="login-header">
@@ -50,31 +67,33 @@ if (isset($_POST['login'])) {
                 <p>Please login to your account</p>
             </div>
 
-            <form class="login-form" id="loginForm" method="post" action="">
+            <form class="login-form" id="loginForm" method="post">
                 <div class="input-group">
                     <label for="email">Email</label>
                     <div class="input-field">
                         <i class="fas fa-envelope"></i>
-                        <input type="email" id="loginEmail" name="email" placeholder="Enter your email">
+                        <input type="email" id="loginEmail" name="email" placeholder="Enter your email" required value="<?php echo e($_POST['email'] ?? ''); ?>">
                     </div>
-                    <span class="error-msg" id="emailError"></span>
                 </div>
 
                 <div class="input-group">
                     <label for="password">Password</label>
                     <div class="input-field">
                         <i class="fas fa-lock"></i>
-                        <input type="password" id="loginPassword" name="password" placeholder="Enter your password">
+                        <input type="password" id="loginPassword" name="password" placeholder="Enter your password" required>
                         <button type="button" class="toggle-pw" id="togglePassword">
                             <i class="fas fa-eye"></i>
                         </button>
                     </div>
-                    <span class="error-msg" id="passwordError">
-                        <?php if (in_array("Invalid_Login", $error)) {
-                            echo "<small>Invalid password</small>";
-                        } ?>
-                    </span>
                 </div>
+
+                <?php if ($flash): ?>
+                    <span class="success-msg"><?php echo e($flash['message']); ?></span>
+                <?php endif; ?>
+
+                <?php if (!empty($error)): ?>
+                    <span class="error-msg"><?php echo e(implode(' ', $error)); ?></span>
+                <?php endif; ?>
 
                 <div class="options">
                     <label class="remember">
@@ -108,10 +127,7 @@ if (isset($_POST['login'])) {
                 <p class="signup-link">Don't have an account? <a href="./register.php" id="signupLink">Sign up</a></p>
             </form>
         </div>
-
     </div>
-
-    <script src="../assets/js/auth.js"></script>
 </body>
 
 </html>
